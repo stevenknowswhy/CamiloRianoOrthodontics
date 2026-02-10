@@ -1,13 +1,12 @@
 "use client";
 
-import { Navigation } from "@/components/Navigation";
 import Image from "next/image";
 import { ContactFlow } from "@/components/ContactFlow";
+import { ContactModule } from "@/components/ContactModule";
 
 export default function SonomaContactPage() {
   return (
     <main className="h-screen w-full relative flex flex-col overflow-hidden">
-      <Navigation />
       
       {/* Background Image Container */}
       <div className="absolute inset-0 -z-10">
@@ -25,6 +24,7 @@ export default function SonomaContactPage() {
 
       {/* Reusable Contact Flow */}
       <ContactFlow />
+      <ContactModule />
     </main>
   );
 }

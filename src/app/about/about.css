@@ -1,0 +1,878 @@
+/* ================================================
+   About Page — Camilo Riaño Orthodontics
+   Rafaela Salvato Aesthetic
+   ================================================ */
+
+/* --- Shared --- */
+.about-page {
+  --about-beige: #EFD8BD;
+  --about-peach: #FFE1CB;
+  --about-gray: #E6E1DD;
+  --about-dark: #1a1a1a;
+  --about-white: #ffffff;
+  --about-border: #d4c4b0;
+  font-family: var(--font-inter), 'DM Sans', sans-serif;
+  color: var(--about-dark);
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ================================================
+   Section 1 — Hero Intro (Two-Column)
+   ================================================ */
+#about-intro {
+  background-color: var(--about-beige);
+  padding: 140px 0 120px;
+  overflow: hidden;
+}
+
+.about-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* --- Left column --- */
+.about-hero-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.about-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  opacity: 0.7;
+  margin-bottom: 24px;
+  font-weight: 500;
+  color: var(--about-dark);
+}
+
+.about-headline {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 46px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--about-dark);
+  margin: 0 0 28px;
+}
+
+.about-body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(26, 26, 26, 0.75);
+  margin: 0 0 40px;
+  max-width: 480px;
+}
+
+.about-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #c8e6c9 0%, #e0d4f5 50%, #b3e5fc 100%);
+  color: var(--about-dark);
+  border: none;
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-inter), 'DM Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* --- Right column: decorative image composition --- */
+.about-hero-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+}
+
+/* Main image placeholder */
+.about-hero-image {
+  position: relative;
+  z-index: 2;
+  width: 380px;
+  height: 440px;
+  background-color: var(--about-gray);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: rgba(26, 26, 26, 0.35);
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Decorative circle outline */
+.about-hero-circle {
+  position: absolute;
+  z-index: 1;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  border: 1.5px solid #c9a87c;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Decorative lilac accent shape */
+.about-hero-accent {
+  position: absolute;
+  z-index: 0;
+  width: 220px;
+  height: 280px;
+  background-color: #c8b8e0;
+  border-radius: 20px;
+  bottom: -10px;
+  right: -20px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ================================================
+   Section 2 — Trust Indicators
+   ================================================ */
+#trust {
+  background-color: var(--about-white);
+  padding: 120px 0;
+}
+
+.trust-heading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 64px;
+  color: var(--about-dark);
+}
+
+.trust-eyebrow {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--about-coral);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.trust-image {
+  background-color: var(--about-gray);
+  aspect-ratio: 3 / 2;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: rgba(26, 26, 26, 0.35);
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              filter 0.5s ease;
+}
+
+.trust-image-img {
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.trust-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+  color: white;
+  z-index: 3;
+  opacity: 1; /* Always visible for clarity or change to 0 for hover */
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.trust-role {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Position-specific radii: large on outer edges, tight on inner seams */
+.trust-image:nth-child(1) { border-radius: 24px 6px 6px 6px; }
+.trust-image:nth-child(2) { border-radius: 6px 24px 6px 6px; }
+.trust-image:nth-child(3) { border-radius: 6px; }
+.trust-image:nth-child(4) { border-radius: 6px; }
+.trust-image:nth-child(5) { border-radius: 6px; }
+.trust-image:nth-child(6) { border-radius: 6px; }
+.trust-image:nth-child(7) { border-radius: 6px 6px 6px 24px; }
+.trust-image:nth-child(8) { border-radius: 6px 6px 24px 6px; }
+
+/* Gradient overlay on hover */
+.trust-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 168, 124, 0.15) 0%,
+    rgba(200, 184, 224, 0.2) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Shine sweep effect */
+.trust-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  transition: left 0.7s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.trust-image:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12),
+              0 4px 12px rgba(0, 0, 0, 0.08);
+  filter: brightness(1.05);
+}
+
+.trust-image:hover .trust-image-img {
+  transform: scale(1.1);
+}
+
+.trust-image:hover::after {
+  opacity: 1;
+}
+
+.trust-image:hover::before {
+  left: 120%;
+}
+
+/* ================================================
+   Section 2.5 — Testimonial Gallery (Infinite Scroll)
+   ================================================ */
+#testimonial-gallery {
+  padding: 140px 0;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse 60% 70% at 50% 50%,
+      #f5c48a 0%,
+      #fdd8b5 30%,
+      #ffe8d6 55%,
+      #fef6ee 80%,
+      #faf5f0 100%
+    );
+  position: relative;
+}
+
+.testimonial-gallery-heading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 56px;
+  color: var(--about-dark);
+}
+
+/* --- Scrolling row --- */
+.testimonial-row {
+  display: flex;
+  width: max-content;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.testimonial-row--left {
+  animation: scroll-left 60s linear infinite;
+}
+
+.testimonial-row--right {
+  animation: scroll-right 60s linear infinite;
+  margin-top: 20px;
+}
+
+/* Pause on hover */
+.testimonial-row:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* --- Individual card --- */
+.testimonial-card {
+  flex-shrink: 0;
+  width: 300px;
+  padding: 28px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  cursor: default;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s ease,
+              background 0.4s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.1),
+              0 4px 16px rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.testimonial-card-text {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--about-dark);
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.testimonial-card-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.testimonial-star {
+  color: #f5b731;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.testimonial-star--empty {
+  color: #d4c4b0;
+}
+
+.testimonial-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--about-dark);
+}
+
+/* --- Social proof bar --- */
+.testimonial-social-proof {
+  text-align: center;
+  margin-top: 56px;
+  padding: 0 24px;
+}
+
+.testimonial-social-proof-text {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(26, 26, 26, 0.7);
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+.testimonial-rating-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.testimonial-rating-number {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--about-dark);
+}
+
+.testimonial-rating-stars {
+  display: flex;
+  gap: 2px;
+  font-size: 20px;
+  color: #f5b731;
+}
+
+.testimonial-google-logo {
+  width: 22px;
+  height: 22px;
+  margin-left: 4px;
+}
+
+.testimonial-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.testimonial-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(26, 26, 26, 0.55);
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease;
+}
+
+.testimonial-link:hover {
+  color: var(--about-dark);
+  text-decoration: underline;
+}
+
+.testimonial-link-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(26, 26, 26, 0.2);
+}
+
+
+/* ================================================
+   Section 4 — Insurance & Billing
+   ================================================ */
+#insurance {
+  background-color: var(--about-white);
+  padding: 120px 0;
+
+}
+
+.insurance-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.insurance-heading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 24px;
+  color: var(--about-dark);
+}
+
+.insurance-text {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(26, 26, 26, 0.85);
+}
+
+.insurance-pills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.insurance-pill {
+  border: 1px solid var(--about-border);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--about-dark);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: default;
+}
+
+.insurance-pill:hover {
+  background-color: var(--about-beige);
+  transform: translateY(-2px);
+}
+
+/* ================================================
+   Section 5 — CTA Block
+   ================================================ */
+#consultation-cta {
+  background-color: var(--about-dark);
+  padding: 100px 0;
+  text-align: center;
+}
+
+.cta-heading {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--about-white);
+  margin-bottom: 32px;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--about-beige);
+  color: var(--about-dark);
+  border: none;
+  border-radius: 50px;
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: var(--font-inter), 'DM Sans', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: var(--about-white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ================================================
+   Dark Mode Overrides
+   ================================================ */
+
+/* --- Flip the local palette variables --- */
+.dark .about-page {
+  --about-beige: #1e1e1e;
+  --about-peach: #2a2220;
+  --about-gray: #2a2a2a;
+  --about-dark: #f5f5f0;
+  --about-white: #121212;
+  --about-border: #3a3a3a;
+}
+
+/* --- Section 1: Hero Intro --- */
+.dark .about-body {
+  color: rgba(245, 245, 240, 0.65);
+}
+
+.dark .about-hero-image {
+  color: rgba(245, 245, 240, 0.3);
+  background-color: #2a2a2a;
+}
+
+.dark .about-hero-circle {
+  border-color: rgba(201, 168, 124, 0.35);
+}
+
+.dark .about-hero-accent {
+  background-color: #3a2e50;
+  opacity: 0.5;
+}
+
+.dark .about-hero-cta {
+  background: linear-gradient(135deg, #2a4a2e 0%, #3a2e50 50%, #1e3a4a 100%);
+  color: #f5f5f0;
+}
+
+.dark .about-hero-cta:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* --- Section 2: Trust Indicators --- */
+.dark .trust-image {
+  background-color: #2a2a2a;
+  color: rgba(245, 245, 240, 0.3);
+}
+
+.dark .trust-image:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3),
+              0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dark .trust-image::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+}
+
+/* --- Section 2.5: Testimonial Gallery --- */
+.dark #testimonial-gallery {
+  background:
+    radial-gradient(
+      ellipse 60% 70% at 50% 50%,
+      #2a2018 0%,
+      #231c14 30%,
+      #1e1a16 55%,
+      #181614 80%,
+      #141210 100%
+    );
+}
+
+.dark .testimonial-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .testimonial-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3),
+              0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.dark .testimonial-social-proof-text {
+  color: rgba(245, 245, 240, 0.6);
+}
+
+.dark .testimonial-link {
+  color: rgba(245, 245, 240, 0.5);
+}
+
+.dark .testimonial-link:hover {
+  color: #f5f5f0;
+}
+
+.dark .testimonial-link-divider {
+  background: rgba(245, 245, 240, 0.2);
+}
+
+.dark .testimonial-star--empty {
+  color: #555;
+}
+
+/* --- Section 4: CTA Block (already dark — pin colors so variable flip doesn't break it) --- */
+.dark #consultation-cta {
+  background-color: #0a0a0a;
+}
+
+.dark .cta-heading {
+  color: #f5f5f0;
+}
+
+.dark .cta-button {
+  background-color: #2a2a2a;
+  color: #f5f5f0;
+  border: 1px solid #3a3a3a;
+}
+
+.dark .cta-button:hover {
+  background-color: #3a3a3a;
+  color: #f5f5f0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Section 5: Insurance & Billing --- */
+.dark .insurance-text {
+  color: rgba(245, 245, 240, 0.75);
+}
+
+.dark .insurance-pill {
+  border-color: #3a3a3a;
+  color: #f5f5f0;
+}
+
+.dark .insurance-pill:hover {
+  background-color: #2a2a2a;
+}
+
+/* ================================================
+   Animations — Scroll Reveal
+   ================================================ */
+.about-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.about-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero stagger — left then right column */
+.about-hero-left .about-reveal:nth-child(1) { transition-delay: 0s; }
+.about-hero-left .about-reveal:nth-child(2) { transition-delay: 0.1s; }
+.about-hero-left .about-reveal:nth-child(3) { transition-delay: 0.2s; }
+.about-hero-left .about-reveal:nth-child(4) { transition-delay: 0.3s; }
+
+/* Grid stagger helper – set via inline style */
+
+/* ================================================
+   Reduced Motion
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .about-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ================================================
+   Responsive — Tablet
+   ================================================ */
+@media (max-width: 1023px) {
+  #about-intro,
+  #trust,
+  #how-we-work,
+  #insurance {
+    padding: 80px 0;
+  }
+
+  .about-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .about-hero-right {
+    min-height: 360px;
+  }
+
+  .about-hero-image {
+    width: 300px;
+    height: 350px;
+  }
+
+  .about-hero-circle {
+    width: 320px;
+    height: 320px;
+  }
+
+  .about-hero-accent {
+    width: 180px;
+    height: 230px;
+  }
+
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+  }
+
+
+
+  .insurance-pills {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ================================================
+   Responsive — Mobile
+   ================================================ */
+@media (max-width: 767px) {
+  #about-intro,
+  #trust,
+  #how-we-work,
+  #insurance {
+    padding: 48px 0;
+  }
+
+  #consultation-cta {
+    padding: 64px 0;
+  }
+
+  .about-hero-right {
+    min-height: 300px;
+  }
+
+  .about-hero-image {
+    width: 260px;
+    height: 300px;
+  }
+
+  .about-hero-circle {
+    width: 280px;
+    height: 280px;
+  }
+
+  .about-hero-accent {
+    width: 150px;
+    height: 200px;
+  }
+
+  .about-headline {
+    font-size: 32px;
+  }
+
+  .about-body {
+    font-size: 15px;
+  }
+
+  .trust-heading,
+  .insurance-heading,
+  .cta-heading {
+    font-size: 28px;
+  }
+
+
+
+  .trust-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+
+
+  .insurance-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .insurance-pills {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .cta-button {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -73,7 +73,7 @@ export function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-dark rounded-3xl p-8 md:p-12 lg:p-16"
+          className="bg-linear-to-b from-[#0f2228] to-[#1f3a3f] rounded-3xl p-8 md:p-12 lg:p-16"
         >
           <div className="flex flex-col gap-16 mb-16">
             {/* Top Section - CTA */}
@@ -95,51 +95,27 @@ export function Footer() {
             </div>
 
             {/* Middle Section - General Links */}
-            <div className="flex flex-col gap-8 lg:gap-12">
-              {/* Row 1: Quick Links & Connect */}
-              <div className="grid sm:grid-cols-2 gap-8 lg:gap-12">
-                {/* Quick Links */}
-                <div>
-                  <h3 className="text-muted-foreground text-sm font-medium mb-4 uppercase tracking-wider">
-                    Quick Links
-                  </h3>
-                  <ul className="space-y-3">
-                    {quickLinks.map((link) => (
-                      <li key={link.name}>
-                        <Link
-                          href={link.href}
-                          className="text-gray-400 hover:text-offwhite transition-colors text-sm"
-                        >
-                          {link.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Connect */}
-                <div>
-                  <h3 className="text-muted-foreground text-sm font-medium mb-4 uppercase tracking-wider">
-                    Connect
-                  </h3>
-                   <ul className="space-y-3">
-                    {connectLinks.map((link) => (
-                      <li key={link.name}>
-                        <Link
-                          href={link.href}
-                          target={link.href.startsWith("http") ? "_blank" : undefined}
-                          rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                          className="text-gray-400 hover:text-offwhite transition-colors text-sm"
-                        >
-                          {link.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-muted-foreground text-sm font-medium mb-4 uppercase tracking-wider">
+                  Quick Links
+                </h3>
+                <ul className="space-y-3">
+                  {quickLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        className="text-gray-400 hover:text-offwhite transition-colors text-sm"
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
 
-              {/* Row 2: Orthodontics */}
+               {/* Orthodontics */}
               <div>
                 <h3 className="text-muted-foreground text-sm font-medium mb-4 uppercase tracking-wider">
                   Orthodontics
@@ -149,6 +125,27 @@ export function Footer() {
                     <li key={link.name}>
                       <Link
                         href={link.href}
+                        className="text-gray-400 hover:text-offwhite transition-colors text-sm"
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Connect */}
+              <div>
+                <h3 className="text-muted-foreground text-sm font-medium mb-4 uppercase tracking-wider">
+                  Connect
+                </h3>
+                 <ul className="space-y-3">
+                  {connectLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        target={link.href.startsWith("http") ? "_blank" : undefined}
+                        rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                         className="text-gray-400 hover:text-offwhite transition-colors text-sm"
                       >
                         {link.name}

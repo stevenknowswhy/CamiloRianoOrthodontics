@@ -8,10 +8,10 @@ export function Hero() {
   return (
     <section className="pt-24 pb-2 px-4 sm:px-6 lg:px-8 bg-cream">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-offwhite rounded-3xl overflow-hidden">
+        <div className="bg-[#0f2228] rounded-3xl overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-0">
             {/* Left Column - Text */}
-            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative">
+            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative bg-[#0f2228]">
               {/* Subtle gradient glow */}
               <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-[#f8c8c0]/20 via-transparent to-transparent pointer-events-none" />
               
@@ -20,14 +20,14 @@ export function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <PillLabel className="mb-6">CAMILO RIAÑO ORTHODONTICS</PillLabel>
+                <PillLabel variant="dark" className="mb-6">CAMILO RIAÑO ORTHODONTICS</PillLabel>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
+                className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6 text-offwhite"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 Orthodontic Care
@@ -39,12 +39,12 @@ export function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="flex items-center gap-4 text-sm font-medium text-foreground mb-6 uppercase tracking-wider"
+                className="flex items-center gap-4 text-sm font-medium text-offwhite mb-6 uppercase tracking-wider"
               >
                 <span>KIDS</span>
-                <span className="w-px h-4 bg-dark" />
+                <span className="w-px h-4 bg-offwhite/20" />
                 <span>TEENS</span>
-                <span className="w-px h-4 bg-dark" />
+                <span className="w-px h-4 bg-offwhite/20" />
                 <span>ADULTS</span>
               </motion.div>
 
@@ -52,7 +52,7 @@ export function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="text-muted-foreground text-base md:text-lg max-w-md leading-relaxed"
+                className="text-gray-300 text-base md:text-lg max-w-md leading-relaxed"
               >
                 We bring together expert-led orthodontic care and patient-centered
                 attention for kids, teens, and adults. Our spaces are thoughtfully

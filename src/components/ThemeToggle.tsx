@@ -4,7 +4,11 @@ import { useTheme } from "./ThemeProvider";
 import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export function ThemeToggle({ className }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -12,7 +16,8 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       className={cn(
         "relative p-2 rounded-full transition-all duration-300",
-        "hover:bg-foreground/10"
+        "hover:bg-foreground/10",
+        className
       )}
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}

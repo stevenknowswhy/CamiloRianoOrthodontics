@@ -2,14 +2,19 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Menu } from "lucide-react";
+import { Menu, MapPin, ChevronDown } from "lucide-react";
 import { FullScreenMenu } from "./FullScreenMenu";
 import { ThemeToggle } from "./ThemeToggle";
+
+// Variant is now determined internally by pathname
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeLocation, setActiveLocation] = useState<"sf" | "sonoma" | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +23,35 @@ export function Navigation() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const locations = {
+    sf: {
+      name: "San Francisco",
+      href: "/contact",
+      phone: "(415) 555-0123",
+      address: "123 Market St, San Francisco, CA 94103"
+    },
+    sonoma: {
+      name: "Sonoma",
+      href: "/contact/sonoma",
+      phone: "(707) 555-0123",
+      address: "456 Broadway, Sonoma, CA 95476"
+    }
+  };
+
+  // Determine variant based on pathname
+  // Contact and Smile Assessment pages use overlay variant
+  const isOverlayPage = pathname === "/contact" || pathname === "/contact/sonoma" || pathname === "/smile-assessment" || pathname === "/virtual-care";
+  const variant = isOverlayPage ? "overlay" : "default";
+
+  // Determine text color based on variant and scroll state
+  const isOverlayAndNotScrolled = variant === "overlay" && !scrolled;
+  const textColorClass = isOverlayAndNotScrolled ? "text-white" : "text-foreground";
+  const hoverTextColorClass = isOverlayAndNotScrolled ? "hover:text-white/80" : "hover:opacity-70";
+  const mutedTextColorClass = isOverlayAndNotScrolled ? "text-white/70" : "text-muted-foreground";
+
+  // Check if we are on a contact or smile assessment page for CTA logic
+  const isContactOrAssessment = pathname?.includes("/contact") || pathname?.includes("/smile-assessment");
 
   return (
     <>
@@ -32,56 +66,127 @@ export function Navigation() {
             {/* Logo */}
             <Link
               href="/"
-              className="text-lg font-medium text-foreground tracking-wide"
+              className={cn(
+                "text-lg font-medium tracking-wide transition-colors",
+                textColorClass
+              )}
             >
               Camilo Riaño <span className="mx-1">•</span> Orthodontics
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              <Link
-                href="/contact"
-                className="flex items-center gap-1 text-sm font-medium text-foreground hover:opacity-70 transition-opacity"
-              >
-                <span className="text-coral">•</span>
-                San Francisco
-              </Link>
-              <Link
-                href="/contact/sonoma"
-                className="text-sm font-medium text-foreground hover:opacity-70 transition-opacity"
-              >
-                Sonoma
-              </Link>
-            </div>
-
-            {/* CTA Button, Language Toggle & Theme Toggle */}
-            <div className="hidden md:flex items-center gap-6">
-              <Link
-                href="#contact"
-                className="bg-[#16a34a] text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-[#15803d] transition-colors"
-              >
-                Book Your Complimentary Consultation
-              </Link>
-              <div className="flex items-center gap-2 text-sm text-foreground">
+            {/* Right Side Group */}
+            <div className="flex items-center gap-3 pl-4">
+              {/* CTA Button, Language Toggle & Theme Toggle */}
+              <div className="hidden md:flex items-center gap-6">
+              {!isContactOrAssessment && (
+                <Link
+                  href="#contact"
+                  className="bg-[#16a34a] text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-[#15803d] transition-colors"
+                >
+                  Book Your Complimentary Consultation
+                </Link>
+              )}
+              <div className={cn("flex items-center gap-2 text-sm transition-colors", textColorClass)}>
                 <span className="font-medium underline underline-offset-4">
                   EN
                 </span>
-                <span className="text-muted-foreground">|</span>
-                <span className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                <span className={mutedTextColorClass}>|</span>
+                <span className={cn("cursor-pointer transition-colors", isOverlayAndNotScrolled ? "text-white/70 hover:text-white" : "text-muted-foreground hover:text-foreground")}>
                   ES
                 </span>
               </div>
-              <ThemeToggle />
+              
+              <div 
+                className="relative group"
+                onMouseLeave={() => setActiveLocation(null)}
+              >
+                <Link
+                  href="/contact"
+                  className={cn(
+                    "relative p-2 rounded-full transition-all duration-300 block",
+                    isOverlayAndNotScrolled ? "hover:bg-white/10" : "hover:bg-foreground/10",
+                    textColorClass
+                  )}
+                  aria-label="Find us"
+                >
+                  <MapPin className="w-5 h-5" />
+                </Link>
+                
+                {/* Dropdown */}
+                <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 w-80 z-50">
+                  <div className="bg-background/95 backdrop-blur-md rounded-xl shadow-lg border border-border overflow-hidden p-4">
+                    {/* Locations Row */}
+                    <div className="flex items-center gap-4 border-b border-border pb-3 mb-3">
+                      <Link 
+                        href="/contact"
+                        className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
+                        onMouseEnter={() => setActiveLocation("sf")}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.5)]"></span>
+                        San Francisco
+                      </Link>
+                      <div className="w-px h-4 bg-border"></div>
+                      <Link 
+                        href="/contact/sonoma"
+                        className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
+                        onMouseEnter={() => setActiveLocation("sonoma")}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.5)]"></span>
+                        Sonoma
+                      </Link>
+                    </div>
+
+                    {/* Dynamic Details Area */}
+                    <div className="min-h-[60px] flex flex-col justify-center">
+                      {!activeLocation ? (
+                        <p className="text-xs text-muted-foreground text-center italic">
+                          Hover over a location to see details
+                        </p>
+                      ) : (
+                        <div className="animate-in fade-in slide-in-from-top-1 duration-200">
+                          <div className="group/phone cursor-default">
+                             <a 
+                               href={`tel:${locations[activeLocation].phone.replace(/\D/g,'')}`}
+                               className="flex items-center justify-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
+                             >
+                               {locations[activeLocation].phone}
+                               <ChevronDown className="w-4 h-4 text-muted-foreground group-hover/phone:text-coral group-hover/phone:rotate-180 transition-all duration-300" />
+                             </a>
+                             
+                             {/* Address Reveal */}
+                             <div className="grid grid-rows-[0fr] group-hover/phone:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                               <div className="overflow-hidden">
+                                 <div className="pt-2 text-center">
+                                   <p className="text-xs text-muted-foreground leading-relaxed px-4">
+                                     {locations[activeLocation].address}
+                                   </p>
+                                 </div>
+                               </div>
+                             </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <ThemeToggle className={cn(textColorClass, isOverlayAndNotScrolled ? "hover:bg-white/10" : "hover:bg-foreground/10")} />
             </div>
 
             {/* Mobile Menu Button - Now visible on all screens as Hamburger */}
             <button
-              className="p-2 -mr-2 text-foreground hover:opacity-70 transition-opacity"
+              className={cn(
+                "p-2 -mr-2 transition-opacity",
+                 textColorClass,
+                 hoverTextColorClass
+              )}
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
             >
               <Menu className="w-6 h-6" />
             </button>
+            </div>
           </div>
         </nav>
       </header>

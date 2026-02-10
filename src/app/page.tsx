@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/Navigation";
 import { ParallaxSection } from "@/components/ParallaxSection";
 import { Hero } from "./sections/Hero";
 import { ReviewTicker } from "./sections/ReviewTicker";
@@ -16,7 +15,6 @@ import { Footer } from "./sections/Footer";
 export default function Home() {
   return (
     <main className="bg-background min-h-screen transition-colors duration-300">
-      <Navigation />
       <Hero />
       <ReviewTicker />
       <StackableCards />
