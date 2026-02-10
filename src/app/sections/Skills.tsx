@@ -1,26 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { AnimatedDiv } from "@/components/AnimatedSection";
 
 const skillCategories = [
   {
-    title: "Web Design",
+    title: "Clinical Expertise & Advanced Treatment",
     skills: [
-      "Design Systems",
-      "Website Design",
-      "Landing Pages",
-      "User Experience Design",
+      "Top 1% Invisalign® Diamond Provider Status",
+      "Specialized Expertise in Hidden Lingual Braces",
+      "Unique Background in Facial & Dental Anatomy",
+      "Comprehensive Orthodontic Solutions for All Ages",
+      "Advanced Digital Precision & Diagnostics",
     ],
   },
   {
-    title: "Brand Design",
+    title: "Patient Experience & Convenience",
     skills: [
-      "Visual Design",
-      "Logos & Visual Identity",
-      "Social Media Graphics",
-      "Presentation Decks",
-      "Colors & Typography",
+      "Sustainable, LEED-Based Office Design",
+      "Virtual Care Program & Remote Monitoring",
+      "Welcoming, Family-Oriented Atmosphere",
+      "Flexible Financing & Insurance Support",
+      "Accessible Locations with Saturday Appointments",
     ],
   },
 ];
@@ -42,9 +44,12 @@ export function Skills() {
               <div className="relative">
                 <div className="aspect-4/5 rounded-2xl overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700">
                   {/* Photo removed/placeholder */}
-                  <div className="w-full h-full bg-border-light/30 flex items-center justify-center">
-                    <span className="text-muted-foreground">Image Placeholder</span>
-                  </div>
+                  <Image
+                    src="/images/WhatWeBring.png"
+                    alt="Dental Studio Team"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </div>
             </motion.div>

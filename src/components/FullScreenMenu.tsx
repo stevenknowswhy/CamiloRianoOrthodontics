@@ -163,7 +163,7 @@ export function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-60 bg-cream overflow-y-auto"
+          className="fixed inset-0 z-[60] bg-cream overflow-y-auto"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
             {/* Header */}
@@ -244,9 +244,11 @@ export function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps) {
                 className="border-t border-border-dark pt-8 flex flex-col md:flex-row justify-between items-center gap-6"
             >
                 <div>
-                     <p className="text-muted-foreground text-sm">
-                        San Francisco • Sonoma
-                     </p>
+                     <div className="text-muted-foreground text-sm flex items-center gap-2">
+                        <Link href="/contact" onClick={onClose} className="hover:text-coral transition-colors py-1">San Francisco</Link>
+                        <span className="text-coral">•</span>
+                        <Link href="/contact/sonoma" onClick={onClose} className="hover:text-coral transition-colors py-1">Sonoma</Link>
+                     </div>
                 </div>
                 <Link
                   href="#contact"

@@ -40,14 +40,14 @@ export function Navigation() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               <Link
-                href="/"
+                href="/contact"
                 className="flex items-center gap-1 text-sm font-medium text-foreground hover:opacity-70 transition-opacity"
               >
                 <span className="text-coral">•</span>
                 San Francisco
               </Link>
               <Link
-                href="#work"
+                href="/contact/sonoma"
                 className="text-sm font-medium text-foreground hover:opacity-70 transition-opacity"
               >
                 Sonoma
