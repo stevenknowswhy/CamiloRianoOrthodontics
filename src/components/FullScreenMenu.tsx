@@ -168,7 +168,7 @@ export function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps) {
             {/* Header */}
             <div className="flex items-center justify-between mb-12 md:mb-16">
               <Link href="/" onClick={onClose} className="text-xl md:text-2xl font-medium tracking-wide text-foreground">
-                Camilo Riaño <span className="mx-1 text-coral">•</span> Orthodontics
+                Dr. Riaño <span className="mx-1 text-coral">•</span> Orthodontics
               </Link>
               <button
                 onClick={onClose}

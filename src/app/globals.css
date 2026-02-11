@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Jules Studio Design System */
+/* Dr. Riaño Orthodontics Design System */
 @theme inline {
   /* Fonts */
   --font-sans:
@@ -29,7 +29,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Custom Jules Studio Colors */
+  /* Custom Brand Colors */
   --color-coral: #d4533f;
   --color-dark: #1a1a1a;
   --color-cream: #e8e6dc;
@@ -52,7 +52,7 @@
 :root {
   --radius: 0.625rem;
 
-  /* Base Colors - Jules Studio Light Theme */
+  /* Base Colors - Light Theme */
   --background: #e8e6dc;
   --foreground: #1a1a1a;
   --card: #f5f5f0;
@@ -116,7 +116,7 @@
 }
 
 @layer utilities {
-  /* Jules Studio Custom Utilities */
+  /* Custom Utilities */
   .section-card {
     @apply bg-card rounded-3xl p-8 md:p-12 lg:p-16;
   }

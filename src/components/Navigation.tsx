@@ -28,14 +28,34 @@ export function Navigation() {
     sf: {
       name: "San Francisco",
       href: "/contact",
-      phone: "(415) 555-0123",
-      address: "123 Market St, San Francisco, CA 94103"
+      phone: "(415) 874-1677",
+      address: "77 Van Ness Ave #303, San Francisco, CA 94102",
+      email: "info@docrianos.com",
+      hours: [
+        { day: "Monday", time: "8:00 AM - 5:00 PM" },
+        { day: "Tuesday", time: "8:00 AM - 5:00 PM" },
+        { day: "Wednesday", time: "9:00 AM - 6:00 PM" },
+        { day: "Thursday", time: "8:00 AM - 5:00 PM" },
+        { day: "Friday", time: "7:15 AM - 3:30 PM" },
+        { day: "Saturday", time: "Closed" },
+        { day: "Sunday", time: "Closed" },
+      ]
     },
     sonoma: {
       name: "Sonoma",
       href: "/contact/sonoma",
-      phone: "(707) 555-0123",
-      address: "456 Broadway, Sonoma, CA 95476"
+      phone: "(707) 935-6878",
+      address: "699 5th St W, Sonoma, CA 95476",
+      email: "infosonoma@docrianos.com",
+      hours: [
+        { day: "Monday", time: "Closed" },
+        { day: "Tuesday", time: "9:00 AM - 6:00 PM" },
+        { day: "Wednesday", time: "Closed" },
+        { day: "Thursday", time: "9:00 AM - 6:00 PM" },
+        { day: "Friday", time: "9:00 AM - 6:00 PM" },
+        { day: "Saturday", time: "8:00 AM - 5:00 PM" },
+        { day: "Sunday", time: "Closed" },
+      ]
     }
   };
 
@@ -71,7 +91,7 @@ export function Navigation() {
                 textColorClass
               )}
             >
-              Camilo Riaño <span className="mx-1">•</span> Orthodontics
+              Dr. Riaño <span className="mx-1">•</span> Orthodontics
             </Link>
 
             {/* Right Side Group */}

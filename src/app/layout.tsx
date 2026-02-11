@@ -26,8 +26,8 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Camilo Riaño Orthodontics | San Francisco & Sonoma",
-  description: "Expert orthodontic care for kids, teens, and adults. LEED-certified sustainable practice in San Francisco and Sonoma.",
+  title: "Dr. Riaño Orthodontics | San Francisco & Sonoma",
+  description: "Expert orthodontic care for kids, teens, and adults. LEED-certified sustainable practice. Visit us at docrianos.com",
 };
 
 export default function RootLayout({

@@ -55,9 +55,9 @@ const serviceCategories = [
 ];
 
 const connectLinks = [
-  { name: "Email", href: "mailto:hello@julesstudio.co" },
-  { name: "Linkedin", href: "https://www.linkedin.com/in/juliagmadsen/" },
-  { name: "Instagram", href: "https://www.instagram.com/julesstudio.co/" },
+  { name: "Email", href: "mailto:info@docrianos.com" },
+  { name: "Linkedin", href: "https://www.linkedin.com/company/docrianos" },
+  { name: "Instagram", href: "https://www.instagram.com/docrianos/" },
 ];
 
 export function Footer() {
@@ -86,7 +86,7 @@ export function Footer() {
                 <span className="italic">happy smile</span>?
               </h2>
               <Link
-                href="mailto:hello@julesstudio.co"
+                href="/contact"
                 className="inline-block bg-cream text-dark px-8 py-4 rounded-full text-base font-medium hover:bg-offwhite transition-colors"
               >
                 Book a Free Call
@@ -193,7 +193,7 @@ export function Footer() {
                   href="/"
                   className="underline hover:text-gray-400 transition-colors"
                 >
-                  Camilo Riaño Orthodontics
+                  Dr. Riaño Orthodontics
                 </Link>
                 .
               </span>
