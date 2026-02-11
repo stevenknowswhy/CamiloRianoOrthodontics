@@ -1,19 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Menu, MapPin, ChevronDown } from "lucide-react";
 import { FullScreenMenu } from "./FullScreenMenu";
 import { ThemeToggle } from "./ThemeToggle";
+import { siteConfig } from "@/data/site-data";
 
-// Variant is now determined internally by pathname
+/**
+ * Navigation Component
+ *
+ * Now powered by centralized site-data:
+ * - Location info (hours, addresses, phones) from siteConfig.locations
+ * - CTA button from siteConfig.navigation.cta
+ * - Language options from siteConfig.navigation.languages
+ * - Logo from siteConfig.metadata
+ *
+ * Component behavior (scroll state, variant detection) remains here.
+ */
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeLocation, setActiveLocation] = useState<"sf" | "sonoma" | null>(null);
+  const [activeLocation, setActiveLocation] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -24,40 +35,9 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const locations = {
-    sf: {
-      name: "San Francisco",
-      href: "/contact",
-      phone: "(415) 874-1677",
-      address: "77 Van Ness Ave #303, San Francisco, CA 94102",
-      email: "info@docrianos.com",
-      hours: [
-        { day: "Monday", time: "8:00 AM - 5:00 PM" },
-        { day: "Tuesday", time: "8:00 AM - 5:00 PM" },
-        { day: "Wednesday", time: "9:00 AM - 6:00 PM" },
-        { day: "Thursday", time: "8:00 AM - 5:00 PM" },
-        { day: "Friday", time: "7:15 AM - 3:30 PM" },
-        { day: "Saturday", time: "Closed" },
-        { day: "Sunday", time: "Closed" },
-      ]
-    },
-    sonoma: {
-      name: "Sonoma",
-      href: "/contact/sonoma",
-      phone: "(707) 935-6878",
-      address: "699 5th St W, Sonoma, CA 95476",
-      email: "infosonoma@docrianos.com",
-      hours: [
-        { day: "Monday", time: "Closed" },
-        { day: "Tuesday", time: "9:00 AM - 6:00 PM" },
-        { day: "Wednesday", time: "Closed" },
-        { day: "Thursday", time: "9:00 AM - 6:00 PM" },
-        { day: "Friday", time: "9:00 AM - 6:00 PM" },
-        { day: "Saturday", time: "8:00 AM - 5:00 PM" },
-        { day: "Sunday", time: "Closed" },
-      ]
-    }
-  };
+  // Get data from siteConfig
+  const { locations, navigation, metadata } = siteConfig;
+  const { main: navLinks, cta, languages } = navigation;
 
   // Determine variant based on pathname
   // Contact and Smile Assessment pages use overlay variant
@@ -72,6 +52,11 @@ export function Navigation() {
 
   // Check if we are on a contact or smile assessment page for CTA logic
   const isContactOrAssessment = pathname?.includes("/contact") || pathname?.includes("/smile-assessment");
+
+  // Get active location data
+  const activeLocationData = activeLocation
+    ? locations.offices.find((loc) => loc.id === activeLocation)
+    : null;
 
   return (
     <>
@@ -91,32 +76,54 @@ export function Navigation() {
                 textColorClass
               )}
             >
-              Dr. Riaño <span className="mx-1">•</span> Orthodontics
+              {metadata.logo.text}
             </Link>
 
             {/* Right Side Group */}
             <div className="flex items-center gap-3 pl-4">
               {/* CTA Button, Language Toggle & Theme Toggle */}
               <div className="hidden md:flex items-center gap-6">
-              {!isContactOrAssessment && (
+              {!isContactOrAssessment && cta && (
                 <Link
-                  href="#contact"
-                  className="bg-[#16a34a] text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-[#15803d] transition-colors"
+                  href={cta.href}
+                  className={cn(
+                    "px-6 py-3 rounded-full text-sm font-medium transition-colors",
+                    cta.variant === "primary"
+                      ? "bg-[#16a34a] text-white hover:bg-[#15803d]"
+                      : "border border-foreground text-foreground hover:bg-foreground hover:text-background"
+                  )}
                 >
-                  Book Your Complimentary Consultation
+                  {cta.label}
                 </Link>
               )}
+
+              {/* Language Toggle */}
               <div className={cn("flex items-center gap-2 text-sm transition-colors", textColorClass)}>
-                <span className="font-medium underline underline-offset-4">
-                  EN
-                </span>
-                <span className={mutedTextColorClass}>|</span>
-                <span className={cn("cursor-pointer transition-colors", isOverlayAndNotScrolled ? "text-white/70 hover:text-white" : "text-muted-foreground hover:text-foreground")}>
-                  ES
-                </span>
+                {languages.available.map((lang, index) => (
+                  <React.Fragment key={lang.code}>
+                    <span
+                      className={cn(
+                        lang.code === languages.default
+                          ? "font-medium underline underline-offset-4"
+                          : "cursor-pointer transition-colors",
+                        isOverlayAndNotScrolled && lang.code !== languages.default
+                          ? "text-white/70 hover:text-white"
+                          : lang.code !== languages.default
+                          ? "text-muted-foreground hover:text-foreground"
+                          : ""
+                      )}
+                    >
+                      {lang.label}
+                    </span>
+                    {index < languages.available.length - 1 && (
+                      <span className={mutedTextColorClass}>|</span>
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
-              
-              <div 
+
+              {/* Location Dropdown */}
+              <div
                 className="relative group"
                 onMouseLeave={() => setActiveLocation(null)}
               >
@@ -131,54 +138,52 @@ export function Navigation() {
                 >
                   <MapPin className="w-5 h-5" />
                 </Link>
-                
+
                 {/* Dropdown */}
                 <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 w-80 z-50">
                   <div className="bg-background/95 backdrop-blur-md rounded-xl shadow-lg border border-border overflow-hidden p-4">
                     {/* Locations Row */}
                     <div className="flex items-center gap-4 border-b border-border pb-3 mb-3">
-                      <Link 
-                        href="/contact"
-                        className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
-                        onMouseEnter={() => setActiveLocation("sf")}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.5)]"></span>
-                        San Francisco
-                      </Link>
-                      <div className="w-px h-4 bg-border"></div>
-                      <Link 
-                        href="/contact/sonoma"
-                        className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
-                        onMouseEnter={() => setActiveLocation("sonoma")}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.5)]"></span>
-                        Sonoma
-                      </Link>
+                      {locations.offices.map((office) => (
+                        <React.Fragment key={office.id}>
+                          {office.id !== locations.offices[0].id && (
+                            <div className="w-px h-4 bg-border"></div>
+                          )}
+                          <Link
+                            href={office.slug === 'sf' ? '/contact' : `/contact/${office.slug}`}
+                            className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
+                            onMouseEnter={() => setActiveLocation(office.id)}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.5)]"></span>
+                            {office.shortName}
+                          </Link>
+                        </React.Fragment>
+                      ))}
                     </div>
 
                     {/* Dynamic Details Area */}
                     <div className="min-h-[60px] flex flex-col justify-center">
-                      {!activeLocation ? (
+                      {!activeLocation || !activeLocationData ? (
                         <p className="text-xs text-muted-foreground text-center italic">
                           Hover over a location to see details
                         </p>
                       ) : (
                         <div className="animate-in fade-in slide-in-from-top-1 duration-200">
                           <div className="group/phone cursor-default">
-                             <a 
-                               href={`tel:${locations[activeLocation].phone.replace(/\D/g,'')}`}
+                             <a
+                               href={`tel:${activeLocationData.contact.phone.replace(/\D/g,'')}`}
                                className="flex items-center justify-center gap-2 text-sm font-medium text-foreground hover:text-coral transition-colors"
                              >
-                               {locations[activeLocation].phone}
+                               {activeLocationData.contact.phoneDisplay}
                                <ChevronDown className="w-4 h-4 text-muted-foreground group-hover/phone:text-coral group-hover/phone:rotate-180 transition-all duration-300" />
                              </a>
-                             
+
                              {/* Address Reveal */}
                              <div className="grid grid-rows-[0fr] group-hover/phone:grid-rows-[1fr] transition-all duration-300 ease-in-out">
                                <div className="overflow-hidden">
                                  <div className="pt-2 text-center">
                                    <p className="text-xs text-muted-foreground leading-relaxed px-4">
-                                     {locations[activeLocation].address}
+                                     {activeLocationData.address.full}
                                    </p>
                                  </div>
                                </div>

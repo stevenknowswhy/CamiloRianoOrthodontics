@@ -1,63 +1,68 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { X, ArrowRight, ChevronDown } from "lucide-react";
+import { siteConfig } from "@/data/site-data";
 
 interface FullScreenMenuProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const quickLinks = [
-  { name: "About Us", href: "/about" },
-  { name: "Smile Assessment", href: "/smile-assessment" },
-  { name: "Virtual Care Bay Area", href: "/virtual-care" },
-  { name: "Doctor Referrals", href: "/referrals" },
-  { name: "Blogs", href: "/blog" },
-  { name: "Contact", href: "/contact" },
-];
+/**
+ * FullScreenMenu Component
+ *
+ * Now powered by centralized site-data:
+ * - Quick links from siteConfig.navigation.mobile
+ * - Orthodontics links from siteConfig.navigation.main[1].children
+ * - Service categories derived from siteConfig.navigation.main[2].children
+ * - Logo from siteConfig.metadata
+ * - CTA from siteConfig.navigation.cta
+ * - Locations from siteConfig.locations
+ */
 
-const ageGroups = [
-  { name: "Children Orthodontist", href: "/orthodontics/children" },
-  { name: "Teens Orthodontic", href: "/orthodontics/teens" },
-  { name: "Adult Orthodontics", href: "/orthodontics/adults" },
-];
+// Extract data from siteConfig
+const { navigation, metadata, locations } = siteConfig;
+const { main: navLinks, mobile: quickLinks, cta } = navigation;
 
+// Find Orthodontics section (index 1 in main nav)
+const orthodonticsNav = navLinks.find((item) => item.label === "Orthodontics");
+const ageGroups = orthodonticsNav?.children?.map((child) => ({
+  name: child.label,
+  href: child.href,
+})) || [];
+
+// Find Services section (index 2 in main nav) and group by categories
+const servicesNav = navLinks.find((item) => item.label === "Services");
+const serviceLinks = servicesNav?.children || [];
+
+// Group services into categories
 const serviceCategories = [
   {
     title: "Braces",
-    links: [
-      { name: "Traditional Braces", href: "/services/traditional-braces" },
-      { name: "Clear Braces", href: "/services/clear-braces" },
-      { name: "Ceramic Braces", href: "/services/ceramic-braces" },
-      { name: "Lingual Braces", href: "/services/lingual-braces" },
-      { name: "Brius Lingual Braces", href: "/services/brius-lingual-braces" },
-    ],
+    links: serviceLinks
+      .filter((s) => s.href?.includes("braces"))
+      .map((s) => ({ name: s.label, href: s.href })),
   },
   {
     title: "Clear Aligners",
-    links: [
-      { name: "Clear Aligners", href: "/services/clear-aligners" },
-      { name: "Invisalign® Clear Aligners", href: "/services/invisalign" },
-      { name: "OrthoFX Clear Aligners", href: "/services/orthofx" },
-    ],
+    links: serviceLinks
+      .filter((s) => s.href?.includes("aligners") || s.href?.includes("invisalign") || s.href?.includes("orthofx"))
+      .map((s) => ({ name: s.label, href: s.href })),
   },
   {
     title: "Retainers",
-    links: [
-      { name: "Dental Retainers", href: "/services/retainers" },
-      { name: "Vivera Retainers", href: "/services/vivera-retainers" },
-    ],
+    links: serviceLinks
+      .filter((s) => s.href?.includes("retainer"))
+      .map((s) => ({ name: s.label, href: s.href })),
   },
   {
     title: "Advanced Treatments",
-    links: [
-      { name: "Orthognathic Surgery", href: "/services/orthognathic-surgery" },
-      { name: "Temporary Anchorage Device", href: "/services/tad" },
-      { name: "Acceledent", href: "/services/acceledent" },
-    ],
+    links: serviceLinks
+      .filter((s) => s.href?.includes("orthognathic") || s.href?.includes("tad") || s.href?.includes("acceledent"))
+      .map((s) => ({ name: s.label, href: s.href })),
   },
 ];
 
@@ -168,7 +173,7 @@ export function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps) {
             {/* Header */}
             <div className="flex items-center justify-between mb-12 md:mb-16">
               <Link href="/" onClick={onClose} className="text-xl md:text-2xl font-medium tracking-wide text-foreground">
-                Dr. Riaño <span className="mx-1 text-coral">•</span> Orthodontics
+                {metadata.logo.text}
               </Link>
               <button
                 onClick={onClose}
@@ -244,18 +249,34 @@ export function FullScreenMenu({ isOpen, onClose }: FullScreenMenuProps) {
             >
                 <div>
                      <div className="text-muted-foreground text-sm flex items-center gap-2">
-                        <Link href="/contact" onClick={onClose} className="hover:text-coral transition-colors py-1">San Francisco</Link>
-                        <span className="text-coral">•</span>
-                        <Link href="/contact/sonoma" onClick={onClose} className="hover:text-coral transition-colors py-1">Sonoma</Link>
+                        {locations.offices.map((office, index) => (
+                          <React.Fragment key={office.id}>
+                            {index > 0 && <span className="text-coral">•</span>}
+                            <Link
+                              href={office.slug === 'sf' ? '/contact' : `/contact/${office.slug}`}
+                              onClick={onClose}
+                              className="hover:text-coral transition-colors py-1"
+                            >
+                              {office.shortName}
+                            </Link>
+                          </React.Fragment>
+                        ))}
                      </div>
                 </div>
-                <Link
-                  href="#contact"
-                  onClick={onClose}
-                  className="bg-success text-white px-8 py-3 rounded-full text-sm font-medium hover:bg-success-dark transition-colors"
-                >
-                  Book Your Complimentary Consultation
-                </Link>
+                {cta && (
+                  <Link
+                    href={cta.href}
+                    onClick={onClose}
+                    className={cn(
+                      "px-8 py-3 rounded-full text-sm font-medium transition-colors",
+                      cta.variant === "primary"
+                        ? "bg-success text-white hover:bg-success/90"
+                        : "border border-foreground text-foreground hover:bg-foreground hover:text-background"
+                    )}
+                  >
+                    {cta.label}
+                  </Link>
+                )}
             </motion.div>
           </div>
         </motion.div>
