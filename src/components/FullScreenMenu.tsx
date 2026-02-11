@@ -15,7 +15,6 @@ const quickLinks = [
   { name: "Smile Assessment", href: "/smile-assessment" },
   { name: "Virtual Care Bay Area", href: "/virtual-care" },
   { name: "Doctor Referrals", href: "/referrals" },
-  { name: "Reviews", href: "/reviews" },
   { name: "Blogs", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ];

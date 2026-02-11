@@ -384,3 +384,44 @@
     font-size: 0.72rem;
   }
 }
+
+/* ================================================
+   Blog Page Styles
+   ================================================ */
+
+.blog-hero-card {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.5s ease, transform 0.5s ease;
+}
+
+.blog-hero-card:hover {
+  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.15);
+}
+
+.blog-card {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.5s ease, transform 0.5s ease;
+}
+
+.blog-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.dark .blog-hero-card {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dark .blog-hero-card:hover {
+  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5);
+}
+
+.dark .blog-card {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dark .blog-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-4px);
+}
+

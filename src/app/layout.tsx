@@ -3,6 +3,7 @@ import { Playfair_Display, Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navigation } from "@/components/Navigation";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -40,8 +41,10 @@ export default function RootLayout({
         className={`${playfair.variable} ${inter.variable} ${cormorant.variable} font-sans antialiased`}
       >
         <ThemeProvider>
-          <Navigation />
-          {children}
+          <SmoothScroll>
+            <Navigation />
+            {children}
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

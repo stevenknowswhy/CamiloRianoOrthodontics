@@ -71,12 +71,12 @@ const insuranceProviders = [
    ------------------------------------------------ */
 const trustImages = [
   {
-    src: "/images/why-choose/Employee1 (1).png",
+    src: "/images/why-choose/Employee1.png",
     name: "Treatment Coordinator",
     role: "Treatment Coordinator",
   },
   {
-    src: "/images/why-choose/Employee6 (1).png",
+    src: "/images/why-choose/Employee6.png",
     name: "Treatment Coordinator",
     role: "Treatment Coordinator",
   },
@@ -87,12 +87,12 @@ const trustImages = [
   },
   // Placeholders for remaining slots
   {
-    src: "/images/why-choose/Employee3 (1).png",
+    src: "/images/why-choose/Employee3.png",
     name: "Treatment Coordinator",
     role: "Treatment Coordinator",
   },
   {
-    src: "/images/why-choose/Employee5 (1).png",
+    src: "/images/why-choose/Employee5.png",
     name: "Dental Assistant",
     role: "Dental Assistant",
   },
