@@ -186,6 +186,29 @@ export function Footer() {
 
           {/* Bottom Bar */}
           <div className="pt-8 border-t border-border-dark">
+            {/* Legal Links */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-6 text-sm">
+              <Link
+                href="/legal/privacy"
+                className="text-gray-400 hover:text-offwhite transition-colors"
+              >
+                Privacy Notice
+              </Link>
+              <Link
+                href="/legal/terms"
+                className="text-gray-400 hover:text-offwhite transition-colors"
+              >
+                Terms of Use
+              </Link>
+              <Link
+                href="/legal/accessibility"
+                className="text-gray-400 hover:text-offwhite transition-colors"
+              >
+                Digital Accessibility
+              </Link>
+            </div>
+            
+            {/* Credits */}
             <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
               <span>
                 site design and development by{" "}

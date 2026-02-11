@@ -4,14 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import { ContactFlow } from "@/components/ContactFlow";
 import { ContactModule } from "@/components/ContactModule";
-import { ContactFooter } from "@/components/ContactFooter";
 
 export default function SonomaContactPage() {
   const [isMessageOpen, setIsMessageOpen] = useState(false);
 
   return (
     <main className="h-screen w-full relative flex flex-col overflow-hidden">
-      
       {/* Background Image Container */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -29,14 +27,8 @@ export default function SonomaContactPage() {
       {/* Reusable Contact Flow */}
       <ContactFlow />
 
-      {/* Contact Footer with Location, Phone, Direct Message */}
-      <ContactFooter 
-        onOpenMessage={() => setIsMessageOpen(true)} 
-        location="sonoma"
-      />
-
-      {/* Contact Module (no floating button, controlled by footer) */}
-      <ContactModule 
+      {/* Contact Module (controlled by state) */}
+      <ContactModule
         isOpen={isMessageOpen}
         onOpenChange={setIsMessageOpen}
         showFloatingButton={false}
