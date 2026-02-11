@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft } from "lucide-react";
+import { submitContactForm } from "@/lib/api";
 
 export function ContactFlow() {
   // steps: 
@@ -30,6 +31,10 @@ export function ContactFlow() {
     email: "",
     message: ""
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const locationOptions = [
     { id: "A", label: "San Francisco" },
@@ -63,7 +68,9 @@ export function ContactFlow() {
     { id: "H", label: "5:00 PM" },
   ];
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    setSubmitError(null);
+    
     // Location Selection
     if (step === 1 && location) {
       setStep(2);
@@ -91,9 +98,28 @@ export function ContactFlow() {
     }
     if (step === 5) {
       // Final Submit Appointment
-      console.log("Appointment Submitted:", { location, topic, date, time });
-      alert("Appointment Request Received! We'll be in touch.");
-      // potential reset or success screen
+      setIsSubmitting(true);
+      
+      const locationLabel = locationOptions.find(o => o.id === location)?.label;
+      const dateLabel = dateOptions.find(o => o.id === date)?.label;
+      const timeLabel = timeOptions.find(o => o.id === time)?.label;
+      
+      const result = await submitContactForm({
+        firstName: contactInfo.firstName,
+        lastName: contactInfo.lastName,
+        email: contactInfo.email || 'no-email@provided.com',
+        phone: contactInfo.phone,
+        message: `Appointment Request\nLocation: ${locationLabel}\nDate: ${dateLabel}\nTime: ${timeLabel}`,
+        location: location === 'B' ? 'sonoma' : 'san-francisco',
+      });
+      
+      setIsSubmitting(false);
+      
+      if (result.success) {
+        setIsSuccess(true);
+      } else {
+        setSubmitError(result.error || 'Failed to submit. Please try again.');
+      }
       return;
     }
 
@@ -101,7 +127,7 @@ export function ContactFlow() {
     if (step === 6) {
        // Validate core fields if needed
        if (!contactInfo.email || !contactInfo.message) {
-         alert("Please fill in at least your email and message.");
+         setSubmitError("Please fill in at least your email and message.");
          return;
        }
        setStep(7);
@@ -109,8 +135,27 @@ export function ContactFlow() {
     }
 
     if (step === 7) {
-       console.log("Inquiry Submitted:", { location, topic, contactInfo });
-       alert("Inquiry Sent! We'll be in touch.");
+       setIsSubmitting(true);
+       
+       const locationLabel = locationOptions.find(o => o.id === location)?.label;
+       const topicLabel = topicOptions.find(o => o.id === topic)?.label;
+       
+       const result = await submitContactForm({
+         firstName: contactInfo.firstName,
+         lastName: contactInfo.lastName,
+         email: contactInfo.email,
+         phone: contactInfo.phone,
+         message: `[${topicLabel}]\n\n${contactInfo.message}`,
+         location: location === 'B' ? 'sonoma' : location === 'C' ? 'both' : 'san-francisco',
+       });
+       
+       setIsSubmitting(false);
+       
+       if (result.success) {
+         setIsSuccess(true);
+       } else {
+         setSubmitError(result.error || 'Failed to submit. Please try again.');
+       }
        return;
     }
   };
@@ -391,7 +436,34 @@ export function ContactFlow() {
                  </div>
               )}
 
+              {/* Error Message */}
+              {submitError && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-white"
+                >
+                  {submitError}
+                </motion.div>
+              )}
+              
+              {/* Success Message */}
+              {isSuccess && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-6 p-8 bg-[#4ecdc4]/20 border border-[#4ecdc4]/50 rounded-2xl text-center text-white"
+                >
+                  <div className="w-16 h-16 bg-[#4ecdc4] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="w-8 h-8 text-[#162a30]" />
+                  </div>
+                  <h3 className="text-2xl font-serif mb-2">Thank You!</h3>
+                  <p>Your submission has been received. We&apos;ll be in touch shortly.</p>
+                </motion.div>
+              )}
+
               {/* Navigation Actions */}
+              {!isSuccess && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -402,19 +474,25 @@ export function ContactFlow() {
                         className="bg-[#4ecdc4] hover:bg-[#45b7af] text-[#162a30] px-8 py-3 rounded-md text-lg font-bold transition-all shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={handleNext}
                         disabled={
+                            isSubmitting ||
                             (step === 1 && !location) ||
                             (step === 2 && !topic) ||
                             (step === 3 && !date) ||
                             (step === 4 && !time)
                         }
                     >
-                        {step === 5 || step === 7 ? "Submit" : "Next"} <Check className="w-4 h-4 ml-1" />
+                        {isSubmitting ? (
+                          <span className="w-5 h-5 border-2 border-[#162a30] border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <>{step === 5 || step === 7 ? "Submit" : "Next"} <Check className="w-4 h-4 ml-1" /></>
+                        )}
                     </button>
                     <p className="hidden md:flex items-center text-xs text-white/50">
                         press <strong className="mx-1">Enter ↵</strong>
                     </p>
                 </div>
               </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

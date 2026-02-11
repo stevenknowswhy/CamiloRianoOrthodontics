@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { submitVirtualCare } from "@/lib/api";
 
 export function VirtualCareFlow() {
   // Steps:
@@ -43,10 +44,47 @@ export function VirtualCareFlow() {
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Virtual Care Form Submitted:", { ...contactInfo, patientType });
-    alert("Thank you! Your information has been submitted. We'll be in touch shortly.");
+    
+    if (!isFormValid()) {
+      setSubmitError('Please fill in all required fields.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    const result = await submitVirtualCare({
+      patientType: patientType || 'new',
+      firstName: contactInfo.firstName,
+      lastName: contactInfo.lastName,
+      email: contactInfo.email,
+      phone: contactInfo.phone,
+      age: contactInfo.age,
+      address: contactInfo.address,
+      address2: contactInfo.address2,
+      city: contactInfo.city,
+      state: contactInfo.state,
+      zip: contactInfo.zip,
+      insurance: contactInfo.insurance,
+      concerns: contactInfo.concerns,
+      message: contactInfo.message,
+      privacyConsent: contactInfo.privacyConsent,
+      marketingConsent: contactInfo.marketingConsent,
+    });
+    
+    setIsSubmitting(false);
+    
+    if (result.success) {
+      setIsSuccess(true);
+    } else {
+      setSubmitError(result.error || 'Failed to submit. Please try again.');
+    }
   };
 
   const isFormValid = () => {
@@ -504,7 +542,41 @@ export function VirtualCareFlow() {
                                <div><span className="text-muted-foreground dark:text-white/50 block text-xs uppercase">Insurance</span><span className="font-medium capitalize">{contactInfo.insurance}</span></div>
                                <div><span className="text-muted-foreground dark:text-white/50 block text-xs uppercase">Concerns</span><span className="font-medium">{contactInfo.concerns}</span></div>
                             </div>
-                            <button onClick={handleSubmit} className={btnClass}>Submit <Check className="w-4 h-4" /></button>
+                            {/* Error Message */}
+                            {submitError && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-foreground dark:text-white"
+                              >
+                                {submitError}
+                              </motion.div>
+                            )}
+                            
+                            {/* Success Message */}
+                            {isSuccess && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="p-8 bg-[#4ecdc4]/20 border border-[#4ecdc4]/50 rounded-2xl text-center"
+                              >
+                                <div className="w-16 h-16 bg-[#4ecdc4] rounded-full flex items-center justify-center mx-auto mb-4">
+                                  <Check className="w-8 h-8 text-[#162a30]" />
+                                </div>
+                                <h3 className="text-2xl font-serif mb-2 text-foreground dark:text-white">Thank You!</h3>
+                                <p className="text-muted-foreground dark:text-white/80">Your virtual care request has been submitted. We&apos;ll be in touch shortly.</p>
+                              </motion.div>
+                            )}
+                            
+                            {!isSuccess && (
+                              <button onClick={handleSubmit} disabled={isSubmitting} className={`${btnClass} disabled:opacity-50 disabled:cursor-not-allowed`}>
+                                {isSubmitting ? (
+                                  <span className="w-5 h-5 border-2 border-[#162a30] border-t-transparent rounded-full animate-spin" />
+                                ) : (
+                                  <>Submit <Check className="w-4 h-4" /></>
+                                )}
+                              </button>
+                            )}
                            </div>
                         )}
                      </>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ArrowRight } from "lucide-react";
+import { submitDoctorReferral } from "@/lib/api";
 
 export function ReferralFlow() {
   // Steps:
@@ -29,6 +30,9 @@ export function ReferralFlow() {
     comments: "",
     xRays: "", // "Unavailable", "Accompanying", "Mailed", "Emailed", "Other"
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const locationOptions = ["San Francisco", "Sonoma"];
   const reasonOptions = [
@@ -46,7 +50,7 @@ export function ReferralFlow() {
     "Other",
   ];
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 0) {
       setStep(1);
       return;
@@ -82,12 +86,33 @@ export function ReferralFlow() {
     // Validate Clinical Details & Submit (Step 4)
     if (step === 4) {
       if (!formData.referralReason) {
-        alert("Please select a reason for the referral.");
+        setSubmitError("Please select a reason for the referral.");
         return;
       }
-      // Submit logic here
-      console.log("Referral Submitted:", formData);
-      setStep(5);
+      
+      setIsSubmitting(true);
+      setSubmitError(null);
+      
+      const result = await submitDoctorReferral({
+        patientFirstName: formData.patientFirstName,
+        patientLastName: formData.patientLastName,
+        patientEmail: formData.patientEmail,
+        patientPhone: formData.patientPhone,
+        preferredLocation: formData.preferredLocation,
+        doctorFirstName: formData.doctorFirstName,
+        doctorLastName: formData.doctorLastName,
+        referralReason: formData.referralReason,
+        xRays: formData.xRays,
+        comments: formData.comments,
+      });
+      
+      setIsSubmitting(false);
+      
+      if (result.success) {
+        setStep(5);
+      } else {
+        setSubmitError(result.error || 'Failed to submit referral. Please try again.');
+      }
       return;
     }
   };
@@ -434,12 +459,28 @@ export function ReferralFlow() {
                     </div>
                  </div>
 
+              {/* Error Message */}
+              {submitError && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-foreground"
+                >
+                  {submitError}
+                </motion.div>
+              )}
+
                <div className="mt-8 flex justify-end">
                 <button
                     onClick={handleNext}
-                    className="bg-[#4ecdc4] hover:bg-[#45b7af] text-[#162a30] px-10 py-4 rounded-full text-lg font-medium transition-all transform hover:scale-105 shadow-lg flex items-center gap-2 w-full justify-center md:w-auto"
+                    disabled={isSubmitting}
+                    className="bg-[#4ecdc4] hover:bg-[#45b7af] text-[#162a30] px-10 py-4 rounded-full text-lg font-medium transition-all transform hover:scale-105 shadow-lg flex items-center gap-2 w-full justify-center md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Submit Referral <Check className="w-5 h-5"/>
+                    {isSubmitting ? (
+                      <span className="w-5 h-5 border-2 border-[#162a30] border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <>Submit Referral <Check className="w-5 h-5"/></>
+                    )}
                 </button>
               </div>
 

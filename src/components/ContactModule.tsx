@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, MessageCircle, X, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { submitContactForm } from "@/lib/api";
 import {
   Accordion,
   AccordionContent,
@@ -13,9 +14,26 @@ import {
 
 type Location = "sf" | "sonoma";
 
-export function ContactModule() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<Location>("sf");
+interface ContactModuleProps {
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showFloatingButton?: boolean;
+  defaultLocation?: Location;
+}
+
+export function ContactModule({ 
+  isOpen: controlledIsOpen, 
+  onOpenChange, 
+  showFloatingButton = true,
+  defaultLocation = "sf"
+}: ContactModuleProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = controlledIsOpen ?? internalIsOpen;
+  const setIsOpen = (open: boolean) => {
+    setInternalIsOpen(open);
+    onOpenChange?.(open);
+  };
+  const [activeTab, setActiveTab] = useState<Location>(defaultLocation);
   const [formState, setFormState] = useState({
     name: "",
     phone: "",
@@ -24,30 +42,60 @@ export function ContactModule() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Address & Map Details
   const locations = {
     sf: {
       name: "San Francisco",
-      address: "77 Van Ness Ave, Suite 303, San Francisco, CA 94102",
-      phone: "(415) 357-1234",
-      mapUrl: "https://maps.google.com/maps?q=77%20Van%20Ness%20Ave%20%23303%2C%20San%20Francisco%2C%20CA%2094102&t=&z=15&ie=UTF8&iwloc=&output=embed"
+      address: "77 Van Ness Ave #303, San Francisco, CA 94102",
+      phone: "(415) 874-1677",
+      email: "info@docrianos.com",
+      mapUrl: "https://maps.google.com/maps?q=77%20Van%20Ness%20Ave%20%23303%2C%20San%20Francisco%2C%20CA%2094102&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      hours: [
+        { day: "Monday", time: "8:00 AM - 5:00 PM" },
+        { day: "Tuesday", time: "8:00 AM - 5:00 PM" },
+        { day: "Wednesday", time: "9:00 AM - 6:00 PM" },
+        { day: "Thursday", time: "8:00 AM - 5:00 PM" },
+        { day: "Friday", time: "7:15 AM - 3:30 PM" },
+        { day: "Saturday", time: "Closed" },
+        { day: "Sunday", time: "Closed" },
+      ]
     },
     sonoma: {
       name: "Sonoma",
-      address: "699 5th Street West, Sonoma, CA 95476",
+      address: "699 5th St W, Sonoma, CA 95476",
       phone: "(707) 935-6878",
-      mapUrl: "https://maps.google.com/maps?q=699%205th%20Street%20West%2C%20Sonoma%2C%20CA%2095476&t=&z=15&ie=UTF8&iwloc=&output=embed"
+      email: "infosonoma@docrianos.com",
+      mapUrl: "https://maps.google.com/maps?q=699%205th%20St%20W%2C%20Sonoma%2C%20CA%2095476&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      hours: [
+        { day: "Monday", time: "Closed" },
+        { day: "Tuesday", time: "9:00 AM - 6:00 PM" },
+        { day: "Wednesday", time: "Closed" },
+        { day: "Thursday", time: "9:00 AM - 6:00 PM" },
+        { day: "Friday", time: "9:00 AM - 6:00 PM" },
+        { day: "Saturday", time: "8:00 AM - 5:00 PM" },
+        { day: "Sunday", time: "Closed" },
+      ]
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError(null);
     
-    // Simulate submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    const result = await submitContactForm({
+      name: formState.name,
+      email: formState.email,
+      phone: formState.phone,
+      message: formState.message,
+      location: activeTab === 'sf' ? 'san-francisco' : 'sonoma',
+    });
+    
+    setIsSubmitting(false);
+    
+    if (result.success) {
       setIsSuccess(true);
       // Reset after showing success
       setTimeout(() => {
@@ -55,22 +103,26 @@ export function ContactModule() {
         setIsSuccess(false);
         setFormState({ name: "", phone: "", email: "", message: "" });
       }, 2000);
-    }, 1000);
+    } else {
+      setSubmitError(result.error || 'Failed to send message. Please try again.');
+    }
   };
 
   return (
     <>
       {/* Floating Action Button */}
-      <motion.button
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#4ecdc4] text-[#162a30] p-4 rounded-full shadow-2xl flex items-center justify-center hover:bg-[#45b7af] transition-colors"
-      >
-        <MessageCircle className="w-6 h-6 md:w-8 md:h-8" fill="currentColor" />
-      </motion.button>
+      {showFloatingButton && (
+        <motion.button
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 bg-[#4ecdc4] text-[#162a30] p-4 rounded-full shadow-2xl flex items-center justify-center hover:bg-[#45b7af] transition-colors"
+        >
+          <MessageCircle className="w-6 h-6 md:w-8 md:h-8" fill="currentColor" />
+        </motion.button>
+      )}
 
       {/* Modal Overlay */}
       <AnimatePresence>
@@ -219,6 +271,12 @@ export function ContactModule() {
                                onChange={e => setFormState({...formState, message: e.target.value})}
                                className="bg-muted border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder-muted-foreground/70 focus:outline-none focus:border-[#4ecdc4] focus:ring-1 focus:ring-[#4ecdc4] transition-all w-full resize-none"
                              />
+                             
+                             {submitError && (
+                               <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                                 {submitError}
+                               </div>
+                             )}
                              
                              <button
                                type="submit"

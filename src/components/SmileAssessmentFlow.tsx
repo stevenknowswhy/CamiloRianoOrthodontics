@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft } from "lucide-react";
+import { submitSmileAssessment } from "@/lib/api";
 
 export function SmileAssessmentFlow() {
   // Steps:
@@ -43,6 +44,9 @@ export function SmileAssessmentFlow() {
   });
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // Options
   const ageOptions = [
@@ -106,7 +110,7 @@ export function SmileAssessmentFlow() {
     { id: "C", label: "I'm not sure" },
   ];
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 1 && patientAge) { setStep(2); return; }
     if (step === 2 && concernCategory) { setStep(3); return; }
     if (step === 3 && concern) { setStep(4); return; }
@@ -148,20 +152,32 @@ export function SmileAssessmentFlow() {
 
     // Submit
     if (step === 12) {
-      console.log("Smile Assessment Submitted:", {
+      setIsSubmitting(true);
+      setSubmitError(null);
+      
+      const result = await submitSmileAssessment({
         patientAge: ageOptions.find(o => o.id === patientAge)?.label,
-        concernCategory: concernCategoryOptions.find(o => o.id === concernCategory)?.label,
-        concern: concernCategory ? specificConcerns[concernCategory]?.find(o => o.id === concern)?.label : concern,
-        status: statusOptions.find(o => o.id === status)?.label,
+        concern: concernCategory ? specificConcerns[concernCategory]?.find(o => o.id === concern)?.label : undefined,
         treatment: treatmentOptions.find(o => o.id === treatment)?.label,
         location: locationOptions.find(o => o.id === location)?.label,
         timeline: timelineOptions.find(o => o.id === timeline)?.label,
         insurance: insuranceOptions.find(o => o.id === insurance)?.label,
-        contactInfo,
+        firstName: contactInfo.firstName,
+        lastName: contactInfo.lastName,
+        email: contactInfo.email,
+        phone: contactInfo.phone,
+        dateOfBirth: contactInfo.dateOfBirth,
         privacyConsent,
-        marketingConsent
+        marketingConsent,
       });
-      alert("Thank you! Your smile assessment has been submitted. We'll be in touch shortly.");
+      
+      setIsSubmitting(false);
+      
+      if (result.success) {
+        setIsSuccess(true);
+      } else {
+        setSubmitError(result.error || 'Failed to submit. Please try again.');
+      }
       return;
     }
   };
@@ -634,7 +650,34 @@ export function SmileAssessmentFlow() {
               </div>
             )}
 
+            {/* Error Message */}
+            {submitError && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-foreground"
+              >
+                {submitError}
+              </motion.div>
+            )}
+            
+            {/* Success Message */}
+            {isSuccess && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mt-6 p-8 bg-[#4ecdc4]/20 border border-[#4ecdc4]/50 rounded-2xl text-center"
+              >
+                <div className="w-16 h-16 bg-[#4ecdc4] rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Check className="w-8 h-8 text-[#162a30]" />
+                </div>
+                <h3 className="text-2xl font-serif mb-2 text-foreground">Thank You!</h3>
+                <p className="text-muted-foreground">Your smile assessment has been submitted. We&apos;ll be in touch shortly.</p>
+              </motion.div>
+            )}
+
             {/* Navigation Actions */}
+            {!isSuccess && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -644,16 +687,20 @@ export function SmileAssessmentFlow() {
                 <button
                   className="bg-[#4ecdc4] hover:bg-[#45b7af] text-[#162a30] px-8 py-3 rounded-md text-lg font-bold transition-all shadow-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleNext}
-                  disabled={isNextDisabled()}
+                  disabled={isNextDisabled() || isSubmitting}
                 >
-                  {step === 12 ? "Submit" : "Next"}{" "}
-                  <Check className="w-4 h-4 ml-1" />
+                  {isSubmitting ? (
+                    <span className="w-5 h-5 border-2 border-[#162a30] border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>{step === 12 ? "Submit" : "Next"} <Check className="w-4 h-4 ml-1" /></>
+                  )}
                 </button>
                 <p className="hidden md:flex items-center text-xs text-muted-foreground">
                   press <strong className="mx-1">Enter ↵</strong>
                 </p>
               </div>
             </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
