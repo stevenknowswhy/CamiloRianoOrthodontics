@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
+import { validatedEnv } from './env';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(validatedEnv.RESEND_API_KEY);
 
 export default resend;
 
@@ -17,9 +18,9 @@ export interface ContactFormData {
 }
 
 export async function sendContactEmail(data: ContactFormData) {
-  const fromEmail = process.env.FROM_EMAIL || 'noreply@docrianos.com';
-  const toEmailSF = process.env.TO_EMAIL_SF || 'info@docrianos.com';
-  const toEmailSonoma = process.env.TO_EMAIL_SONOMA || 'infosonoma@docrianos.com';
+  const fromEmail = validatedEnv.FROM_EMAIL;
+  const toEmailSF = validatedEnv.TO_EMAIL_SF;
+  const toEmailSonoma = validatedEnv.TO_EMAIL_SONOMA;
   
   // Determine recipient based on location preference
   let toEmails: string[] = [toEmailSF];
